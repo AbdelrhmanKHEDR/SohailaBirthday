@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For My Favorite Person ❤️</title>
+  <style>
+    :root{
+      --pink:#ff4f87;
+      --pink2:#ff7aa5;
+      --rose:#ff2f73;
+      --cream:#fff8f3;
+      --ink:#3d2330;
+      --gold:#ffd166;
+      --white:#ffffff;
+      --shadow:0 18px 45px rgba(139, 45, 80, .18);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 20% 10%, #ffe6ef 0, transparent 30%),
+        radial-gradient(circle at 80% 20%, #fff0cf 0, transparent 25%),
+        linear-gradient(135deg,#fff9f6,#ffeaf1);
+      overflow-x:hidden;
+    }
+
+    button,input,select,textarea{font:inherit}
+
+    .hidden{display:none!important}
+
+    .floating-hearts{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
+    }
+
+    .heart{
+      position:absolute;
+      bottom:-60px;
+      opacity:.15;
+      animation:floatUp linear infinite;
+      filter:drop-shadow(0 8px 10px rgba(255,79,135,.2));
+    }
+
+    @keyframes floatUp{
+      0%{transform:translateY(0) rotate(0deg) scale(.8);opacity:0}
+      10%{opacity:.18}
+      80%{opacity:.18}
+      100%{transform:translateY(-120vh) rotate(25deg) scale(1.25);opacity:0}
+    }
+
+    .screen{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      position:relative;
+      z-index:1;
+    }
+
+    .card{
+      width:min(760px,100%);
+      background:rgba(255,255,255,.82);
+      backdrop-filter:blur(14px);
+      border:1px solid rgba(255,255,255,.9);
+      box-shadow:var(--shadow);
+      border-radius:30px;
+      padding:34px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-50% auto auto -20%;
+      width:300px;
+      height:300px;
+      background:radial-gradient(circle,#ffd6e5,transparent 65%);
+      pointer-events:none;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:#fff0f5;
+      color:#b6295a;
+      font-weight:800;
+      font-size:.82rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      font-size:clamp(2.2rem,7vw,5rem);
+      line-height:.98;
+      margin:20px 0 14px;
+    }
+
+    h2{
+      font-size:clamp(1.8rem,4vw,3rem);
+      margin:10px 0 14px;
+    }
+
+    p{
+      font-size:1.05rem;
+      line-height:1.75;
+      margin:10px auto;
+      max-width:650px;
+    }
+
+    .date-highlight{
+      color:var(--rose);
+      text-shadow:0 8px 20px rgba(255,47,115,.18);
+    }
+
+    .input-row,
+    .date-picker-row{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .date-picker-row select{
+      width:auto;
+      min-width:120px;
+    }
+
+    input[type="text"], textarea, select{
+      width:min(430px,100%);
+      border:1px solid #f1c6d4;
+      background:#fff;
+      border-radius:16px;
+      padding:14px 16px;
+      outline:none;
+      transition:.2s ease;
+      color:var(--ink);
+    }
+
+    textarea{min-height:100px;resize:vertical}
+
+    input:focus,textarea:focus,select:focus{
+      border-color:var(--pink);
+      box-shadow:0 0 0 4px rgba(255,79,135,.12);
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:14px 24px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:0 10px 22px rgba(255,79,135,.16);
+    }
+
+    .btn-primary{
+      color:white;
+      background:linear-gradient(135deg,var(--pink),var(--rose));
+    }
+
+    .btn-soft{
+      color:#9d3157;
+      background:#ffe9f1;
+    }
+
+    .btn:hover{transform:translateY(-2px) scale(1.02)}
+    .btn:active{transform:scale(.98)}
+
+    .error{
+      min-height:24px;
+      color:#c72c57;
+      font-weight:700;
+      margin-top:12px;
+    }
+
+    .main{
+      display:none;
+      opacity:0;
+      transform:translateY(20px);
+    }
+
+    .main.show{
+      display:block;
+      animation:reveal .9s ease forwards;
+    }
+
+    @keyframes reveal{
+      to{opacity:1;transform:none}
+    }
+
+    section{
+      min-height:92vh;
+      display:grid;
+      place-items:center;
+      padding:48px 22px;
+      position:relative;
+      z-index:1;
+    }
+
+    .hero-title .tiny{
+      display:block;
+      font-size:.3em;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+      color:#9b5b71;
+    }
+
+    .letter{
+      text-align:left;
+      max-width:640px;
+      margin:24px auto 0;
+      padding:24px;
+      background:#fffafc;
+      border-radius:22px;
+      border:1px solid #f7d7e2;
+      line-height:1.8;
+    }
+
+    .invite-area{
+      min-height:150px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      flex-wrap:wrap;
+      position:relative;
+      margin-top:24px;
+    }
+
+    #noBtn{
+      position:relative;
+      transition:.13s ease;
+      user-select:none;
+    }
+
+    .success-box{
+      margin-top:22px;
+      padding:18px;
+      border-radius:18px;
+      background:#fff2f7;
+      border:1px solid #ffc8da;
+    }
+
+    .choices{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:14px;
+      margin:22px 0;
+    }
+
+    .choice{
+      padding:20px;
+      background:#fff;
+      border:1px solid #f6ceda;
+      border-radius:20px;
+      cursor:pointer;
+      transition:.2s ease;
+      box-shadow:0 8px 20px rgba(90,35,58,.06);
+    }
+
+    .choice:hover{
+      transform:translateY(-4px);
+      border-color:#ff94b5;
+    }
+
+    .emoji{font-size:2rem;display:block;margin-bottom:8px}
+
+    .mini-note{
+      font-size:.92rem;
+      color:#805a69;
+    }
+
+    .memory-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .memory{
+      background:linear-gradient(180deg,#fff,#fff3f7);
+      padding:18px;
+      border-radius:18px;
+      border:1px solid #f6d1dd;
+      min-height:145px;
+      display:grid;
+      place-items:center;
+      font-weight:750;
+    }
+
+    .countdown{
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:22px;
+    }
+
+    .count-box{
+      min-width:110px;
+      padding:18px 12px;
+      border-radius:20px;
+      background:#fff;
+      box-shadow:0 10px 25px rgba(90,35,58,.08);
+      border:1px solid #f7d1df;
+    }
+
+    .count-box strong{
+      display:block;
+      font-size:2rem;
+      color:var(--rose);
+    }
+
+    .kiss{
+      position:fixed;
+      pointer-events:none;
+      z-index:99;
+      font-size:28px;
+      animation:pop 1s ease forwards;
+    }
+
+    @keyframes pop{
+      0%{transform:scale(.4) translateY(0);opacity:0}
+      30%{opacity:1}
+      100%{transform:scale(1.8) translateY(-80px) rotate(18deg);opacity:0}
+    }
+
+    .footer{
+      padding:50px 20px 80px;
+      text-align:center;
+      color:#7d5967;
+      position:relative;
+      z-index:1;
+    }
+
+
+    .timeline{
+      position:relative;
+      max-width:680px;
+      margin:28px auto 0;
+      text-align:left;
+    }
+
+    .timeline::before{
+      content:"";
+      position:absolute;
+      left:18px;
+      top:8px;
+      bottom:8px;
+      width:3px;
+      background:linear-gradient(var(--pink),#ffd2df);
+      border-radius:20px;
+    }
+
+    .timeline-item{
+      position:relative;
+      padding:0 0 28px 54px;
+    }
+
+    .timeline-item::before{
+      content:"❤️";
+      position:absolute;
+      left:0;
+      top:-3px;
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      background:#fff;
+      border-radius:50%;
+      box-shadow:0 6px 18px rgba(122,47,75,.12);
+    }
+
+    .timeline-item strong{
+      display:block;
+      color:var(--rose);
+      margin-bottom:4px;
+    }
+
+    .secret-card{
+      margin:24px auto 0;
+      max-width:600px;
+      padding:24px;
+      border:2px dashed #f0a8bf;
+      border-radius:22px;
+      background:#fff9fb;
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+      margin-top:28px;
+    }
+
+    .photo-card{
+      position:relative;
+      aspect-ratio:4/5;
+      border-radius:22px;
+      overflow:hidden;
+      background:
+        linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.05)),
+        linear-gradient(135deg,#ffcadd,#ff91b4);
+      box-shadow:0 15px 32px rgba(87,37,58,.14);
+      transform:rotate(var(--r,0deg));
+      transition:.3s ease;
+    }
+
+    .photo-card:nth-child(1){--r:-2deg}
+    .photo-card:nth-child(2){--r:2deg}
+    .photo-card:nth-child(3){--r:-1deg}
+    .photo-card:nth-child(4){--r:2deg}
+    .photo-card:nth-child(5){--r:-2deg}
+    .photo-card:nth-child(6){--r:1deg}
+
+    .photo-card:hover{
+      transform:rotate(0) translateY(-7px) scale(1.02);
+      z-index:3;
+    }
+
+    .photo-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .photo-placeholder{
+      height:100%;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      color:white;
+      text-align:center;
+      font-weight:800;
+      line-height:1.5;
+    }
+
+    .photo-caption{
+      position:absolute;
+      left:10px;
+      right:10px;
+      bottom:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(8px);
+      font-size:.9rem;
+      font-weight:800;
+      color:#7f3650;
+    }
+
+    .envelope{
+      width:min(420px,100%);
+      margin:28px auto 0;
+      padding:34px 24px;
+      border-radius:26px;
+      background:linear-gradient(145deg,#fff,#ffe4ee);
+      border:1px solid #f6c8d8;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      transition:.3s ease;
+    }
+
+    .envelope:hover{transform:translateY(-5px) rotate(-1deg)}
+
+    .envelope-icon{
+      font-size:4rem;
+      display:block;
+      margin-bottom:10px;
+    }
+
+    .final-message{
+      margin-top:22px;
+      padding:22px;
+      border-radius:20px;
+      background:#fff2f7;
+      border:1px solid #ffc8da;
+      animation:reveal .6s ease forwards;
+    }
+
+    @media(max-width:720px){
+      .gallery{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media(max-width:560px){
+      .card{padding:26px 18px;border-radius:24px}
+      .btn{width:100%}
+      .invite-area{display:block}
+      .invite-area .btn{margin:7px 0}
+      .gallery{grid-template-columns:1fr}
+      .date-picker-row select{width:100%}
+    }
+
+    /* ===== MEMORY MAP ===== */
+    .card.wide{width:min(980px,100%)}
+    .map-progress{margin:18px auto 0;max-width:420px;font-weight:800;color:#9d3157}
+    .map-progress .bar{height:10px;border-radius:99px;background:#ffe3ec;margin-top:8px;overflow:hidden}
+    .map-progress .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));transition:width .6s ease}
+    .mapwrap{
+      position:relative;margin-top:22px;aspect-ratio:16/10;border-radius:26px;overflow:hidden;
+      border:2px dashed #f0a8bf;
+      background:
+        radial-gradient(circle at 15% 80%,rgba(255,209,102,.35),transparent 28%),
+        radial-gradient(circle at 85% 20%,rgba(255,122,165,.28),transparent 30%),
+        repeating-linear-gradient(45deg,rgba(255,79,135,.05) 0 2px,transparent 2px 18px),
+        #fff7f9;
+    }
+    .map-trail{position:absolute;inset:0;width:100%;height:100%}
+    .map-trail path{fill:none;stroke:#ff7aa5;stroke-width:3;stroke-dasharray:2 10;stroke-linecap:round;vector-effect:non-scaling-stroke}
+    .trail-mob{display:none}
+    .pin{
+      position:absolute;left:calc(var(--x)*1%);top:calc(var(--y)*1%);
+      transform:translate(-50%,-50%);
+      width:58px;height:58px;border-radius:50%;
+      border:3px solid var(--pink);background:#fff;cursor:pointer;
+      font-size:1.5rem;display:grid;place-items:center;padding:0;
+      box-shadow:0 10px 22px rgba(255,79,135,.25);
+      transition:transform .2s ease;
+    }
+    .pin:hover,.pin:focus-visible{transform:translate(-50%,-50%) scale(1.12);outline:none}
+    .pin:focus-visible{box-shadow:0 0 0 4px rgba(255,79,135,.3)}
+    .pin .badge{position:absolute;right:-6px;bottom:-6px;font-size:.95rem;background:#fff;border-radius:50%;width:24px;height:24px;display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.15)}
+    .pin .pin-label{
+      position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+      white-space:nowrap;font-size:.72rem;font-weight:800;color:#7f3650;
+      background:rgba(255,255,255,.92);padding:3px 9px;border-radius:99px;
+    }
+    .pin.locked::after{
+      content:"";position:absolute;inset:-3px;border-radius:50%;border:3px solid var(--pink);
+      animation:pinPulse 2.2s ease-out infinite;pointer-events:none;
+    }
+    @keyframes pinPulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
+    .pin.done{background:linear-gradient(135deg,var(--pink),var(--rose));border-color:#fff}
+    .pin.done .badge{display:none}
+
+    .memo-modal{
+      position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:18px;
+      background:rgba(61,35,48,.55);backdrop-filter:blur(6px);
+    }
+    .memo-card{
+      position:relative;width:min(560px,100%);max-height:92vh;overflow:auto;
+      background:#fffafc;border-radius:28px;padding:34px 24px 26px;text-align:center;
+      box-shadow:var(--shadow);border:1px solid #f7d7e2;
+    }
+    .memo-card h2{font-size:clamp(1.4rem,4vw,1.9rem)}
+    .memo-close{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:none;background:#ffe9f1;color:#9d3157;font-weight:800;cursor:pointer}
+    .memo-tools{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+    .hint-box{margin-top:14px;padding:12px 14px;border-radius:14px;background:#fff2f7;border:1px dashed #f0a8bf;font-weight:700;color:#7f3650}
+    .polaroid{margin:6px auto 16px;width:min(320px,100%);background:#fff;padding:12px 12px 18px;border-radius:6px;box-shadow:0 18px 40px rgba(87,37,58,.22);transform:rotate(-2deg)}
+    .polaroid-photo{aspect-ratio:1/1;overflow:hidden;background:linear-gradient(135deg,#ffcadd,#ff91b4)}
+    .polaroid-photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .polaroid figcaption{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:#7f3650;margin-top:12px;font-size:1rem}
+    .polaroid.developing img{animation:develop 2.8s ease-out forwards}
+    @keyframes develop{
+      0%{filter:grayscale(1) brightness(.35) blur(12px)}
+      60%{filter:grayscale(.7) sepia(.6) brightness(.85) blur(4px)}
+      100%{filter:none}
+    }
+    .btn-link{text-decoration:none;display:inline-block}
+    @media(max-width:640px){
+      .mapwrap{aspect-ratio:3/4.3}
+      .pin{left:calc(var(--mx)*1%);top:calc(var(--my)*1%);width:50px;height:50px;font-size:1.3rem}
+      .trail-desk{display:none}
+      .trail-mob{display:block}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .pin.locked::after{animation:none}
+      .polaroid.developing img{animation:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-hearts" id="hearts"></div>
+
+  <!-- ENTRY GATE -->
+  <div class="screen" id="gate">
+    <div class="card">
+      <span class="eyebrow">Top Secret 💌</span>
+      <h1>Only one girl can enter this page.</h1>
+      <p>
+        Prove that you are really <strong>my favorite person</strong>:
+        enter the date of our first date together.
+      </p>
+      <p class="mini-note">Choose the date carefully... I am watching 😌</p>
+
+      <div class="date-picker-row">
+        <select id="firstDay" aria-label="Day">
+          <option value="">Day</option>
+        </select>
+        <select id="firstMonth" aria-label="Month">
+          <option value="">Month</option>
+          <option value="01">January</option>
+          <option value="02">February</option>
+          <option value="03">March</option>
+          <option value="04">April</option>
+          <option value="05">May</option>
+          <option value="06">June</option>
+          <option value="07">July</option>
+          <option value="08">August</option>
+          <option value="09">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+        <select id="firstYear" aria-label="Year">
+          <option value="">Year</option>
+        </select>
+        <button class="btn btn-primary" id="unlockBtn">Unlock My Heart ❤️</button>
+      </div>
+      <div class="error" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <!-- WEBSITE -->
+  <main class="main" id="main">
+    <section>
+      <div class="card">
+        <span class="eyebrow">Access Granted 💖</span>
+        <h1 class="hero-title">
+          <span class="tiny">The universe did something right on</span>
+          <span class="date-highlight">18 • 11</span>
+        </h1>
+        <p>
+          Because on that day, the person who would one day become one of the
+          most beautiful parts of my life was born.
+        </p>
+        <p>
+          Happy Birthday, my love. I hope every year I get the privilege of
+          making you smile harder, laugh louder, and feel more loved than the year before.
+        </p>
+        <button class="btn btn-primary" onclick="document.getElementById('letterSection').scrollIntoView()">Open your birthday letter 💌</button>
+      </div>
+    </section>
+
+    <section id="letterSection">
+      <div class="card">
+        <span class="eyebrow">A Small Letter</span>
+        <h2>For the woman I choose ❤️</h2>
+
+        <div class="letter">
+          My love,<br><br>
+          Today is not just your birthday. It is a reminder that the world became
+          better on the day you were born — and my world became better when our paths met.<br><br>
+
+          I love the little things: the way you smile, the way you talk, the moments
+          that become funny for no reason, and even the times we annoy each other and
+          somehow still end up choosing each other.<br><br>
+
+          I do not want to promise you a perfect life. I want to promise you a real one:
+          full of effort, laughter, support, silly memories, dates, food, adventures,
+          and a love that keeps growing with us.<br><br>
+
+          Happy Birthday, my future. 🎂❤️
+        </div>
+      </div>
+    </section>
+
+    <section id="inviteSection">
+      <div class="card">
+        <span class="eyebrow">Important Question 😌</span>
+        <h2>Will you go on a birthday date with me?</h2>
+        <p>Choose carefully. One button is suspiciously easier to click than the other.</p>
+
+        <div class="invite-area" id="inviteArea">
+          <button class="btn btn-primary" id="yesBtn">YES, obviously ❤️</button>
+          <button class="btn btn-soft" id="noBtn">Reject 😏</button>
+        </div>
+
+        <div class="success-box hidden" id="acceptedBox">
+          <strong>Excellent choice 😌💍</strong>
+          <p>I knew you were smart. Now we have one more serious matter to decide...</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="foodSection" class="hidden">
+      <div class="card">
+        <span class="eyebrow">Dinner Mission 🍽️</span>
+        <h2>Who chooses the food?</h2>
+        <p>You can tell me exactly what you want, or trust me and let me surprise you.</p>
+
+        <div class="choices">
+          <div class="choice" id="herChoice">
+            <span class="emoji">🍝</span>
+            <strong>I choose my food</strong>
+            <div class="mini-note">Tell me your birthday craving.</div>
+          </div>
+
+          <div class="choice" id="myChoice">
+            <span class="emoji">🎁</span>
+            <strong>You choose for me</strong>
+            <div class="mini-note">Dangerous... but romantic.</div>
+          </div>
+        </div>
+
+        <div id="foodInputBox" class="hidden">
+          <textarea id="foodText" placeholder="Write your dream birthday meal here..."></textarea>
+          <br><br>
+          <button class="btn btn-primary" id="saveFoodBtn">Save My Request 😋</button>
+        </div>
+
+        <div id="foodResult" class="success-box hidden"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card">
+        <span class="eyebrow">Birthday Countdown 🎂</span>
+        <h2>Counting down to 18 November 2026</h2>
+        <div class="countdown">
+          <div class="count-box"><strong id="days">0</strong>Days</div>
+          <div class="count-box"><strong id="hours">0</strong>Hours</div>
+          <div class="count-box"><strong id="minutes">0</strong>Minutes</div>
+          <div class="count-box"><strong id="seconds">0</strong>Seconds</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card">
+        <span class="eyebrow">Tiny Reasons</span>
+        <h2>Why you are special to me</h2>
+        <div class="memory-grid">
+          <div class="memory">Your smile can fix a bad day. ❤️</div>
+          <div class="memory">You make ordinary moments feel important. ✨</div>
+          <div class="memory">You are my favorite person to tease. 😂</div>
+          <div class="memory">I can imagine my future with you in it. 💍</div>
+          <div class="memory">You make food taste better just by being there. 🍕</div>
+          <div class="memory">Even our silly arguments become memories. 😌</div>
+        </div>
+      </div>
+    </section>
+
+
+    <section>
+      <div class="card">
+        <span class="eyebrow">Our Little Story 📖</span>
+        <h2>Some chapters I never want to forget</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <strong>The day we met</strong>
+            One normal day that had no idea it was about to become important.
+          </div>
+          <div class="timeline-item">
+            <strong>30 April 2026 — my best date ever ❤️</strong>
+            The date that became the password to this whole website.
+          </div>
+          <div class="timeline-item">
+            <strong>15 July 2026 — Confusing Date ❤️</strong>
+            The date that you hear from me that i love you.
+          </div>
+          <div class="timeline-item">
+            <strong>The day we got engaged 💍</strong>
+            The moment “you and me” became “our future. (14-8-2026)”
+          </div>
+          <div class="timeline-item">
+            <strong>18 November 2026 🎂</strong>
+            Your birthday — and another excuse for me to spoil you.
+          </div>
+          <div class="timeline-item">
+            <strong>Next chapter...</strong>
+            Still being written. Hopefully with lots of food, traveling, laughing, and annoying each other forever.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card">
+        <span class="eyebrow">Do Not Click 🤫</span>
+        <h2>There is definitely nothing hidden here.</h2>
+        <p>Seriously. Very boring. No romance at all.</p>
+        <button class="btn btn-soft" id="secretBtn">Fine... click me 🙈</button>
+        <div class="secret-card hidden" id="secretNote">
+          <h2>Got you 😌❤️</h2>
+          <p>
+            No matter how fancy this website gets, my favorite part is still simple:
+            I get to call you mine, and I get to keep choosing you.
+          </p>
+          <p><strong>P.S.</strong> You are also officially banned from pretending you are not cute.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallerySection">
+      <div class="card">
+        <span class="eyebrow">Us ❤️</span>
+        <h2>My favorite gallery in the world lhabebtee we mratee al most2blya</h2>
+
+        <div class="gallery">
+          <div class="photo-card">
+            <img src="images/4.jpeg" alt="Our memory 1" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="photo-placeholder" style="display:none">📸<br>Photo 1<br>One of our favorite memories</div>
+            <div class="photo-caption">Where one smile says everything ❤️</div>
+          </div>
+          <div class="photo-card">
+            <img src="images/3.jpeg" alt="Our memory 2" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="photo-placeholder" style="display:none">🥰<br>Photo 2<br>Add a cute photo here</div>
+            <div class="photo-caption">My favorite person to make memories with</div>
+          </div>
+          <div class="photo-card">
+            <img src="images/1.jpeg" alt="Our memory 3" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="photo-placeholder" style="display:none">😂<br>Photo 3<br>Add a funny photo here</div>
+            <div class="photo-caption">Evidence that we are not normal 😂</div>
+          </div>
+          <div class="photo-card">
+            <img src="images/5.jpeg" alt="Our memory 4" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="photo-placeholder" style="display:none">💍<br>Photo 4<br>Add an engagement photo</div>
+            <div class="photo-caption">One step closer to forever 💍</div>
+          </div>
+          <div class="photo-card">
+            <img src="images/2.jpeg" alt="Our memory 5" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="photo-placeholder" style="display:none">🌷<br>Photo 5<br>Add another memory</div>
+            <div class="photo-caption">A normal moment that became special</div>
+          </div>
+          <div class="photo-card">
+            <img src="images/6.jpg" alt="Our memory 6" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <div class="photo-placeholder" style="display:none">❤️<br>Photo 6<br>Your best photo together</div>
+            <div class="photo-caption">My favorite chapter so far</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mapSection">
+      <div class="card wide">
+        <span class="eyebrow">Memory Map 🗺️</span>
+        <h2>Six places. Six memories. Do you remember them?</h2>
+        <p>Tap a pin, read the clue, and name the place. If you remember it, the photo from that day develops right in front of you.</p>
+
+        <div class="map-progress">
+          <span id="mapCount">0</span> / 6 memories unlocked
+          <div class="bar"><i id="mapBar"></i></div>
+        </div>
+
+        <div class="mapwrap" id="mapWrap">
+          <svg class="map-trail trail-desk" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M14 70 C 20 40, 24 30, 30 28 S 44 64, 48 62 S 58 26, 62 24 S 76 62, 80 58 S 86 30, 90 22"/>
+          </svg>
+          <svg class="map-trail trail-mob" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M22 88 C 40 90, 68 84, 72 72 S 30 66, 24 56 S 70 50, 74 40 S 30 34, 26 24 S 66 16, 70 9"/>
+          </svg>
+          <div id="mapPins"></div>
+        </div>
+
+        <div class="success-box hidden" id="mapDone">
+          <strong>You remembered everything 🥹💖</strong>
+          <p>All six memories are open. As a reward, here is the rest of our album — the photos that did not fit on the map.</p>
+          <a class="btn btn-primary btn-link" id="albumLink" href="memories.html">Open our full album 📸</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="memo-modal hidden" id="memoModal" role="dialog" aria-modal="true" aria-labelledby="memoTitle">
+      <div class="memo-card">
+        <button class="memo-close" id="memoClose" aria-label="Close">✕</button>
+
+        <div id="memoLocked">
+          <span class="eyebrow" id="memoKicker"></span>
+          <h2 id="memoTitle"></h2>
+          <p id="memoRiddle"></p>
+          <div class="input-row">
+            <input type="text" id="memoInput" placeholder="Where was this?" autocomplete="off">
+            <button class="btn btn-primary" id="memoSubmit">Open memory 🔓</button>
+          </div>
+          <div class="error" id="memoMsg"></div>
+          <div class="hint-box hidden" id="memoHint"></div>
+          <div class="memo-tools">
+            <button class="btn btn-soft" id="memoHintBtn">Give me a hint 🕵️</button>
+            <button class="btn btn-soft hidden" id="memoGiveUp">I forgot 🙈</button>
+          </div>
+        </div>
+
+        <div id="memoUnlocked" class="hidden">
+          <figure class="polaroid" id="memoPolaroid">
+            <div class="polaroid-photo">
+              <img id="memoImg" alt="" style="display:none">
+              <div class="photo-placeholder" id="memoPh" style="display:none"></div>
+            </div>
+            <figcaption id="memoCaption"></figcaption>
+          </figure>
+          <p id="memoStory"></p>
+          <button class="btn btn-primary" id="memoNext">Next memory ➜</button>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="card">
+        <span class="eyebrow">One Last Thing 💌</span>
+        <h2>Your birthday mission</h2>
+        <p>This envelope contains your final instruction. Open only if you are ready.</p>
+
+        <div class="envelope" id="envelope">
+          <span class="envelope-icon">💌</span>
+          <strong>Tap to open</strong>
+          <div class="mini-note">Warning: may contain romance.</div>
+        </div>
+
+        <div class="final-message hidden" id="finalMessage">
+          <h2>Get ready for me ❤️</h2>
+          <p>
+            The website ends here, but your birthday does not.
+            Your only job is to get ready, bring that smile I love,
+            and let me handle the rest.
+          </p>
+          <p><strong>Dress code:</strong> beautiful — which is unfairly easy for you.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card">
+        <span class="eyebrow">Final Surprise</span>
+        <h2>Click for unlimited birthday Giftsss 💋</h2>
+        <p>I accept no responsibility for excessive affection.</p>
+        <button class="btn btn-primary" id="kissBtn">ynf3 tdoseee hnaa ❤️</button>
+      </div>
+    </section>
+
+    <div class="footer">
+      Walahe al3zem b7bekkk we bmottt fekeeee ❤️
+    </div>
+  </main>
+
+  <script>
+    // =========================
+    // CUSTOMIZE THESE VALUES
+    // =========================
+    const CORRECT_FIRST_DATE = "05-04-2026"; // DD-MM-YYYY
+    const BIRTHDAY = new Date("2026-11-18T00:00:00");
+
+    const gate = document.getElementById("gate");
+    const main = document.getElementById("main");
+    const firstDay = document.getElementById("firstDay");
+    const firstMonth = document.getElementById("firstMonth");
+    const firstYear = document.getElementById("firstYear");
+    const unlockBtn = document.getElementById("unlockBtn");
+    const errorMsg = document.getElementById("errorMsg");
+
+    // Fill dropdown lists
+    for(let d = 1; d <= 31; d++){
+      const option = document.createElement("option");
+      option.value = String(d).padStart(2,"0");
+      option.textContent = d;
+      firstDay.appendChild(option);
+    }
+
+    for(let y = 2020; y <= 2026; y++){
+      const option = document.createElement("option");
+      option.value = String(y);
+      option.textContent = y;
+      firstYear.appendChild(option);
+    }
+
+    function unlock(){
+      if(!firstDay.value || !firstMonth.value || !firstYear.value){
+        errorMsg.textContent = "Choose the full date first, detective 😌";
+        return;
+      }
+
+      const value = `${firstDay.value}-${firstMonth.value}-${firstYear.value}`;
+
+      if(value === CORRECT_FIRST_DATE){
+        errorMsg.textContent = "Correct. Of course you remembered 😌❤️";
+        setTimeout(()=>{
+          gate.style.display = "none";
+          main.classList.add("show");
+          window.scrollTo({top:0,behavior:"smooth"});
+          burstHearts(32);
+        }, 650);
+      }else{
+        const messages = [
+          "Hmm... suspicious. Try again, birthday girl 😏",
+          "Wrong answer! Are you sure you are my fiancée? 😂",
+          "Nice try. The heart vault is still locked 🔒❤️",
+          "Almost romantic enough... but not the right date 😌"
+        ];
+        errorMsg.textContent = messages[Math.floor(Math.random()*messages.length)];
+        document.querySelector(".date-picker-row").animate(
+          [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
+          {duration:260}
+        );
+      }
+    }
+
+    unlockBtn.addEventListener("click", unlock);
+
+    // Funny reject button
+    const noBtn = document.getElementById("noBtn");
+    const inviteArea = document.getElementById("inviteArea");
+
+    function escapeNoButton(){
+      const area = inviteArea.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
+
+      noBtn.style.position = "absolute";
+
+      const maxX = Math.max(0, area.width - btn.width);
+      const maxY = Math.max(0, area.height - btn.height);
+
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top = Math.random() * maxY + "px";
+
+      const texts = [
+        "Nope 😂",
+        "Too slow 😌",
+        "Try again 😏",
+        "Wrong button ❤️",
+        "Impossible 😂"
+      ];
+      noBtn.textContent = texts[Math.floor(Math.random()*texts.length)];
+    }
+
+    ["mouseenter","pointerdown","touchstart"].forEach(evt=>{
+      noBtn.addEventListener(evt, e=>{
+        e.preventDefault();
+        escapeNoButton();
+      }, {passive:false});
+    });
+
+    // Accept invitation
+    document.getElementById("yesBtn").addEventListener("click", ()=>{
+      document.getElementById("acceptedBox").classList.remove("hidden");
+      document.getElementById("foodSection").classList.remove("hidden");
+      burstHearts(45);
+
+      setTimeout(()=>{
+        document.getElementById("foodSection").scrollIntoView({behavior:"smooth"});
+      }, 700);
+    });
+
+    // Food flow
+    document.getElementById("herChoice").addEventListener("click", ()=>{
+      document.getElementById("foodInputBox").classList.remove("hidden");
+      document.getElementById("foodResult").classList.add("hidden");
+    });
+
+    document.getElementById("myChoice").addEventListener("click", ()=>{
+      const box = document.getElementById("foodResult");
+      box.innerHTML = "<strong>Deal 😎</strong><p>I choose everything. Your only job is to look beautiful and come hungry.</p>";
+      box.classList.remove("hidden");
+      document.getElementById("foodInputBox").classList.add("hidden");
+    });
+
+    document.getElementById("saveFoodBtn").addEventListener("click", ()=>{
+      const food = document.getElementById("foodText").value.trim();
+      const box = document.getElementById("foodResult");
+
+      if(!food){
+        box.innerHTML = "<strong>No cheating 😌</strong><p>You have to tell me at least one thing you want to eat.</p>";
+      }else{
+        box.innerHTML = `<strong>Request received 🍴❤️</strong><p>Birthday menu request: “${escapeHtml(food)}”</p><p>I will consider this official royal instructions.</p>`;
+      }
+
+      box.classList.remove("hidden");
+    });
+
+    function escapeHtml(text){
+      return text.replace(/[&<>"']/g, m => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      })[m]);
+    }
+
+    // Countdown
+    function updateCountdown(){
+      const now = new Date();
+      const diff = BIRTHDAY - now;
+
+      if(diff <= 0){
+        document.getElementById("days").textContent = "🎉";
+        document.getElementById("hours").textContent = "❤️";
+        document.getElementById("minutes").textContent = "🎂";
+        document.getElementById("seconds").textContent = "💋";
+        return;
+      }
+
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const mins = Math.floor((diff / (1000*60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours.toString().padStart(2,"0");
+      document.getElementById("minutes").textContent = mins.toString().padStart(2,"0");
+      document.getElementById("seconds").textContent = secs.toString().padStart(2,"0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown,1000);
+
+    // Floating background hearts
+    const hearts = document.getElementById("hearts");
+    const symbols = ["❤️","💗","💕","💖","🌷"];
+
+    for(let i=0;i<24;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+      h.style.left = Math.random()*100 + "vw";
+      h.style.fontSize = (14 + Math.random()*24) + "px";
+      h.style.animationDuration = (10 + Math.random()*12) + "s";
+      h.style.animationDelay = (-Math.random()*20) + "s";
+      hearts.appendChild(h);
+    }
+
+    function burstHearts(count=20){
+      for(let i=0;i<count;i++){
+        const k = document.createElement("div");
+        k.className = "kiss";
+        k.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+        k.style.left = (20 + Math.random()*60) + "vw";
+        k.style.top = (40 + Math.random()*25) + "vh";
+        k.style.animationDelay = Math.random()*.35 + "s";
+        document.body.appendChild(k);
+        setTimeout(()=>k.remove(),1500);
+      }
+    }
+
+    // Hidden love note
+    document.getElementById("secretBtn").addEventListener("click", ()=>{
+      document.getElementById("secretNote").classList.toggle("hidden");
+      burstHearts(16);
+    });
+
+    // Final envelope
+    document.getElementById("envelope").addEventListener("click", ()=>{
+      document.getElementById("finalMessage").classList.remove("hidden");
+      document.getElementById("envelope").innerHTML =
+        '<span class="envelope-icon">💖</span><strong>Opened with love</strong>';
+      burstHearts(35);
+    });
+
+    document.getElementById("kissBtn").addEventListener("click", ()=>{
+      burstHearts(55);
+    });
+
+    // =====================================================
+    // MEMORY MAP — EDIT THE 6 PLACES BELOW  ✏️
+    // answers : words that count as correct (any one is enough, typos in case/spaces are fine)
+    // reveal  : the place's nice name (used for the letter hint after wrong tries)
+    // img     : image file name inside /images (no extension needed: .jpg .jpeg .png .webp all work)
+    // =====================================================
+    const PLACES = [
+      { kicker:"Where it began", emoji:"🌷", x:14, y:70, mx:22, my:88,
+        riddle:"05 April 2026. A first date that became the password to this website. Where were we?",
+        hint:"Think about what we ordered first.",
+        answers:["30 north"], reveal:"30 north",
+        img:"car", caption:"Day one ❤️", story:"walahe alstory bta3t alyom dah an ana kont msh 3arf an anazl a3ml eh we mtwtr awe bs lma shoftek enbhrt an fe 7ad blgmal dah kolo mwgod." },
+      { kicker:"Van Gogh", emoji:"💗", x:30, y:28, mx:72, my:72,
+        riddle:"30 Apr 2026. District 5 \"mn a7la alyam\" lya alyom dah , what was the flavor of jelly i brought it to you ?",
+        hint:"It was a confusing day, remember?",
+        answers:["Cherry"], reveal:"Cherry",
+        img:"van", caption:"The confusing date 😌", story:"story of that day eno ana kont mabsot awe wana nazl we grbt 7aga gdeda m3ake we 3lfkra kda kda knt hawslk 7ata lw tant 2altle mtwslhash." },
+      { kicker:"yome almofdl", emoji:"😂", x:80, y:58, mx:26, my:24,
+        riddle:"alyom ala5tdek feh lma konty 3tlana we get 3la mala weshe , shrbna ahwa alyom dah kan mn fen we kont labs eh we 7te ben al egbten - ?",
+        hint:"Nobody else will know that.",
+        answers:["starbucks-short"], reveal:"starbucks-short",
+        img:"matcha", caption:"ad eh ana shoftek fl yom dah a7la w7da fl donia 😂", story:"ana kont nazl mn altamren. we 5oft 3leke awe lma 2oltele 3tlte fa trt we klmt mamtek wana fl tare2 we 2oltlha na haro7lha we harw7ha kont 2l2an 3leke awe" },
+      { kicker:"the day i confess loving you", emoji:"❤️", x:48, y:62, mx:24, my:56,
+        riddle:"15 Jul 2026. The place where \"i confess\" that \"i love you\". waht was the color of the flowers i gave you?",
+        hint:"You said yes, obviously.",
+        answers:["red"], reveal:"red",
+        img:"1", caption:"i love that day very much ❤️", story:"kont 7aset be eny b7bek 5las fa kont mabsot any nazl we bsra7a kont 2l2an mn rad f3lk l7sn mat3rfesh trode bs nazrtk lya baynt kol 7aga bmot fekeee." },
+      { kicker:"our engagement", emoji:"💍", x:62, y:24, mx:74, my:40,
+        riddle:"a7la yom fe 7yate yom 5tobtna. eh aktr 7aga 3agbtne feke alyom dah ?",
+        hint:"fakreee kwyssss.",
+        answers:["make up"], reveal:"make up",
+        img:"eng", caption:"konty a7la 3rosa fl denya 💍", story:"al story bta3t alyom dah an enty konty a7la 3rosa ana shoftha fe 7yate we bgd ana b3od atfrg 3la alswr bt2tna kol yom." },
+      { kicker:"Seven Fortune ", emoji:"📸", x:90, y:22, mx:70, my:9,
+        riddle:"kan yom mofdl lya bardo kona 5las m5toben , what was the drink that we share it toghter?",
+        hint:"You said \"delete it\" and I did not.",
+        answers:["dirty espresso"], reveal:"dirty espresso",
+        img:"coffee", caption:"alyom dah 8yrle mafhome shwya ad eh an fe nas gamela we ad eh ana b7md rbna eny a5trt sa7 🌷", story:"bgd enty mafesh zayek we bgd ana msh hala2e zayek ya souu we atmna tfdle m3aya 3latol we 3lfkra feh mwakf ktera msh dol bs we fe swr ktera bardo bs 3shan mtwlsh 3leke ." }
+    ];
+    const ALBUM_PAGE = "memories.html";
+
+    // ---------- helpers ----------
+    const normText = s => String(s).toLowerCase().normalize("NFKD")
+      .replace(/[^a-z0-9\u0600-\u06FF]+/g,"");
+    function isMatch(input, answers){
+      const u = normText(input);
+      if(u.length < 2) return false;
+      return answers.some(a=>{
+        const n = normText(a);
+        return n && (u === n || u.includes(n) || (u.length >= 4 && n.includes(u)));
+      });
+    }
+    function loadImageFallback(img, ph, base){
+      const exts = ["jpg","jpeg","png","webp","JPG","JPEG","PNG"];
+      let i = 0;
+      img.onload = ()=>{ img.style.display = "block"; ph.style.display = "none"; };
+      img.onerror = ()=>{
+        i++;
+        if(i < exts.length){ img.src = `images/${base}.${exts[i]}`; }
+        else { img.style.display = "none"; ph.style.display = "grid"; }
+      };
+      img.src = `images/${base}.${exts[0]}`;
+    }
+
+    // ---------- state ----------
+    const mapPins = document.getElementById("mapPins");
+    const modal = document.getElementById("memoModal");
+    const $ = id => document.getElementById(id);
+    let found = new Set();
+    let current = 0, attempts = 0;
+
+    function saveFound(){ /* progress is intentionally NOT saved: reload = start over */ }
+
+    function renderPins(){
+      mapPins.innerHTML = "";
+      PLACES.forEach((p,i)=>{
+        const b = document.createElement("button");
+        const done = found.has(i);
+        b.className = "pin " + (done ? "done" : "locked");
+        b.style.cssText = `--x:${p.x};--y:${p.y};--mx:${p.mx};--my:${p.my}`;
+        b.setAttribute("aria-label", `Memory ${i+1}: ${p.kicker} (${done ? "unlocked" : "locked"})`);
+        b.innerHTML = `${done ? "❤️" : p.emoji}<span class="badge">🔒</span><span class="pin-label">${p.kicker}</span>`;
+        b.addEventListener("click", ()=>openPlace(i));
+        mapPins.appendChild(b);
+      });
+      $("mapCount").textContent = found.size;
+      $("mapBar").style.width = (found.size / PLACES.length * 100) + "%";
+      $("mapDone").classList.toggle("hidden", found.size < PLACES.length);
+    }
+
+    function showPhoto(i, animate){
+      const p = PLACES[i];
+      $("memoLocked").classList.add("hidden");
+      $("memoUnlocked").classList.remove("hidden");
+      const pol = $("memoPolaroid");
+      pol.classList.remove("developing");
+      void pol.offsetWidth;
+      if(animate) pol.classList.add("developing");
+      $("memoImg").alt = p.caption;
+      $("memoPh").innerHTML = `${p.emoji}<br>Add images/${p.img}.jpg`;
+      loadImageFallback($("memoImg"), $("memoPh"), p.img);
+      $("memoCaption").textContent = p.caption;
+      $("memoStory").textContent = p.story;
+      const hasNext = PLACES.some((_,k)=>!found.has(k));
+      $("memoNext").textContent = hasNext ? "Next memory ➜" : "Close 💖";
+    }
+
+    function openPlace(i){
+      current = i; attempts = 0;
+      const p = PLACES[i];
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+      if(found.has(i)){ showPhoto(i, false); return; }
+      $("memoUnlocked").classList.add("hidden");
+      $("memoLocked").classList.remove("hidden");
+      $("memoKicker").textContent = `Memory ${i+1} of ${PLACES.length}`;
+      $("memoTitle").textContent = `${p.emoji} ${p.kicker}`;
+      $("memoRiddle").textContent = p.riddle;
+      $("memoInput").value = "";
+      $("memoMsg").textContent = "";
+      $("memoHint").classList.add("hidden");
+      $("memoGiveUp").classList.add("hidden");
+      $("memoHintBtn").classList.remove("hidden");
+      setTimeout(()=>$("memoInput").focus(), 50);
+    }
+
+    function closeModal(){
+      modal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+
+    function unlockPlace(i, gaveUp){
+      found.add(i); saveFound(); renderPins();
+      showPhoto(i, true);
+      burstHearts(gaveUp ? 18 : 45);
+      if(found.size === PLACES.length){ setTimeout(()=>burstHearts(70), 900); }
+    }
+
+    function submitAnswer(){
+      const p = PLACES[current];
+      const val = $("memoInput").value.trim();
+      if(!val){ $("memoMsg").textContent = "Type a place first, detective 😌"; return; }
+      if(isMatch(val, p.answers)){
+        unlockPlace(current, false);
+        return;
+      }
+      attempts++;
+      const wrong = [
+        "Hmm... that is not the place 😏",
+        "Close your eyes and picture that day 😌",
+        "Wrong place! Are you sure you were there? 😂",
+        "Think about how it felt, not just where 💭"
+      ];
+      $("memoMsg").textContent = wrong[(attempts-1) % wrong.length];
+      $("memoLocked").animate(
+        [{transform:"translateX(0)"},{transform:"translateX(-8px)"},{transform:"translateX(8px)"},{transform:"translateX(0)"}],
+        {duration:260}
+      );
+      if(attempts >= 2){ showHint(true); }
+      if(attempts >= 4){ $("memoGiveUp").classList.remove("hidden"); }
+    }
+
+    function showHint(withLetters){
+      const p = PLACES[current];
+      let text = "🕵️ " + p.hint;
+      if(withLetters){
+        const letters = p.reveal.split(" ").map(w=>w.charAt(0) + "•".repeat(Math.max(0,w.length-1))).join("  ");
+        text += "  —  " + letters;
+      }
+      $("memoHint").textContent = text;
+      $("memoHint").classList.remove("hidden");
+    }
+
+    $("memoSubmit").addEventListener("click", submitAnswer);
+    $("memoInput").addEventListener("keydown", e=>{ if(e.key === "Enter") submitAnswer(); });
+    $("memoHintBtn").addEventListener("click", ()=>{ showHint(false); });
+    $("memoGiveUp").addEventListener("click", ()=>{
+      unlockPlace(current, true);
+      $("memoStory").textContent = "You forgot this one 🙈 — so I will remember it for both of us. " + PLACES[current].story;
+    });
+    $("memoNext").addEventListener("click", ()=>{
+      const next = PLACES.findIndex((_,k)=>!found.has(k));
+      if(next === -1){ closeModal(); $("mapDone").scrollIntoView({behavior:"smooth", block:"center"}); }
+      else openPlace(next);
+    });
+    $("memoClose").addEventListener("click", closeModal);
+    modal.addEventListener("click", e=>{ if(e.target === modal) closeModal(); });
+    document.addEventListener("keydown", e=>{ if(e.key === "Escape" && !modal.classList.contains("hidden")) closeModal(); });
+    $("albumLink").setAttribute("href", ALBUM_PAGE);
+
+    renderPins();
+
+    // Coming back from the album skips the password once; a reload asks again
+    if(["#mapSection","#gallerySection"].includes(location.hash)){
+      gate.style.display = "none";
+      main.classList.add("show");
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  </script>
+</body>
+</html>
